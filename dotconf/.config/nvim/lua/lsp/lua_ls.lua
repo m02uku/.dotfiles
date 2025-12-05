@@ -1,6 +1,6 @@
 return {
-  cmd = { 'lua-language-server' },
-  filetypes = { 'lua' },
+  -- cmd = { 'lua-language-server' },
+  -- filetypes = { 'lua' },
   on_init = function(client)
     if client.workspace_folders then
       local path = client.workspace_folders[1].name

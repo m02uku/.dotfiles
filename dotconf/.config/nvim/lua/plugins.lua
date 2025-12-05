@@ -450,101 +450,98 @@ later(function() require('mini.comment').setup() end)
 -- |    add    | : External modules (Plugins)
 -- |-----------|
 
-later(function()
-  -- avoid error
-  vim.treesitter.start = (function(wrapped)
-    return function(bufnr, lang)
-      lang = lang or vim.fn.getbufvar(bufnr or '', '&filetype')
+-- avoid error
+vim.treesitter.start = (function(wrapped)
+  return function(bufnr, lang)
+    lang = lang or vim.fn.getbufvar(bufnr or '', '&filetype')
 
-      pcall(wrapped, bufnr, lang)
+    pcall(wrapped, bufnr, lang)
+  end
+end)(vim.treesitter.start)
+
+add({
+  source = 'https://github.com/nvim-treesitter/nvim-treesitter',
+  hooks = {
+    post_checkout = function()
+      vim.cmd.TSUpdate()
     end
-  end)(vim.treesitter.start)
+  },
+})
+---@diagnostic disable-next-line: missing-fields
+require('nvim-treesitter.configs').setup({
+  -- auto-install parsers
+  ensure_installed = { 'lua', 'vim', 'tsx' },
+  highlight = { enable = true },
+})
 
-  add({
-    source = 'https://github.com/nvim-treesitter/nvim-treesitter',
-    hooks = {
-      post_checkout = function()
-        vim.cmd.TSUpdate()
-      end
-    },
-  })
-  ---@diagnostic disable-next-line: missing-fields
-  require('nvim-treesitter.configs').setup({
-    -- auto-install parsers
-    ensure_installed = { 'lua', 'vim', 'tsx' },
-    highlight = { enable = true },
-  })
+add({
+  source = 'https://github.com/JoosepAlviste/nvim-ts-context-commentstring',
+})
+require('ts_context_commentstring').setup({})
 
-  add({
-    source = 'https://github.com/JoosepAlviste/nvim-ts-context-commentstring',
-  })
-  require('ts_context_commentstring').setup({})
-end)
-
-later(function()
-  add({ source = 'https://github.com/stevearc/quicker.nvim' })
-  local quicker = require('quicker')
-  vim.keymap.set('n', 'mq', function()
-    quicker.toggle()
-    quicker.refresh()
-  end, { desc = 'Toggle quickfix' })
-  quicker.setup({
-    keys = {
-      {
-        ">",
-        function()
-          require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
-        end,
-        desc = "Expand quickfix context",
-      },
-      {
-        "<",
-        function()
-          require("quicker").collapse()
-        end,
-        desc = "Collapse quickfix context",
-      },
-    },
-  })
-end)
-
-later(function()
-  add({ source = 'https://github.com/zbirenbaum/copilot.lua' })
-
-  ---@diagnostic disable-next-line: undefined-field
-  require('copilot').setup({
-    suggestion = {
-      auto_trigger = true,
-      hide_during_completion = false,
-      keymap = {
-        accept = '<c-e>',
-      },
-    },
-    filetypes = {
-      markdown = true,
-      gitcommit = true,
-      ['*'] = function()
-        -- disable for files with specific names
-        local fname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
-        local disable_patterns = { 'env', 'conf', 'local', 'private' }
-        return vim.iter(disable_patterns):all(function(pattern)
-          return not string.match(fname, pattern)
-        end)
+add({ source = 'https://github.com/stevearc/quicker.nvim' })
+local quicker = require('quicker')
+vim.keymap.set('n', 'mq', function()
+  quicker.toggle()
+  quicker.refresh()
+end, { desc = 'Toggle quickfix' })
+quicker.setup({
+  keys = {
+    {
+      ">",
+      function()
+        require("quicker").expand({ before = 2, after = 2, add_to_existing = true })
       end,
+      desc = "Expand quickfix context",
     },
-  })
-
-  -- set CopilotSuggestion as underlined comment
-  local hl = vim.api.nvim_get_hl(0, { name = 'Comment' })
-  vim.api.nvim_set_hl(0, 'CopilotSuggestion', vim.tbl_extend('force', hl, { underline = true }))
-
-  add({
-    source = 'https://github.com/CopilotC-Nvim/CopilotChat.nvim',
-    depends = {
-      'https://github.com/nvim-lua/plenary.nvim',
-      'https://github.com/zbirenbaum/copilot.lua'
+    {
+      "<",
+      function()
+        require("quicker").collapse()
+      end,
+      desc = "Collapse quickfix context",
     },
-  })
+  },
+})
 
-  require('CopilotChat').setup()
-end)
+add({ source = 'https://github.com/zbirenbaum/copilot.lua' })
+
+---@diagnostic disable-next-line: undefined-field
+require('copilot').setup({
+  suggestion = {
+    auto_trigger = true,
+    hide_during_completion = false,
+    keymap = {
+      accept = '<c-e>',
+    },
+  },
+  filetypes = {
+    markdown = true,
+    gitcommit = true,
+    ['*'] = function()
+      -- disable for files with specific names
+      local fname = vim.fs.basename(vim.api.nvim_buf_get_name(0))
+      local disable_patterns = { 'env', 'conf', 'local', 'private' }
+      return vim.iter(disable_patterns):all(function(pattern)
+        return not string.match(fname, pattern)
+      end)
+    end,
+  },
+})
+
+-- set CopilotSuggestion as underlined comment
+local hl = vim.api.nvim_get_hl(0, { name = 'Comment' })
+vim.api.nvim_set_hl(0, 'CopilotSuggestion', vim.tbl_extend('force', hl, { underline = true }))
+
+add({
+  source = 'https://github.com/CopilotC-Nvim/CopilotChat.nvim',
+  depends = {
+    'https://github.com/nvim-lua/plenary.nvim',
+    'https://github.com/zbirenbaum/copilot.lua'
+  },
+})
+
+require('CopilotChat').setup()
+vim.keymap.set({ 'n', 'x' }, '<space>c', ':CopilotChat ', { desc = 'Open Copilot Chat' })
+
+add('https://github.com/neovim/nvim-lspconfig.git')
