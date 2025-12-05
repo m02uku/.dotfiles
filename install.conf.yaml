@@ -1,0 +1,32 @@
+- defaults:
+    link:
+      create: true
+      relink: true
+
+- clean: ['~']
+
+- link:
+    # If the target location is omitted or set to null,
+    # Dotbot will use the basename of the link name,
+    # with a leading `.` stripped if present.
+    ~/:
+      glob: true
+      path: dotconf/.*
+      exclude: [dotconf/.config]
+    ~/.config/:
+      glob: true
+      path: dotconf/.config/**
+
+- create:
+    ~/.ssh:
+      mode: 0700
+    ~/.ssh/config:
+      mode: 0644
+    ~/.config:
+    ~/downloads:
+    ~/projects:
+
+- shell:
+  # [1:shell command, 2:human-readable description (optional)]
+  - [git submodule update --init --recursive, Installing submodules]
+  - [source ~/.zshrc, Apply changes]
