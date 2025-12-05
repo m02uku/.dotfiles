@@ -5,7 +5,7 @@
 - To install dotfiles on a new machine:
 
 ```shell
-git clone <your-dotfiles-repo-url> ~/.dotfiles
+git clone git@github.com:m02uku/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 ./install
 ```

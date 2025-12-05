@@ -441,7 +441,8 @@ later(function()
   vim.keymap.set('n', 'mmt', MiniMap.toggle, { desc = 'MiniMap.toggle' })
 end)
 
-later(function() require('mini.comments').setup() end)
+-- Comment lines
+later(function() require('mini.comment').setup() end)
 
 -- ================================================================================
 
