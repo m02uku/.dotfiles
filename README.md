@@ -17,4 +17,8 @@ cd ~/.dotfiles
 git pull
 ./install
 ```
+## Requirements
 
+- Each lsp
+- rg command (ripgrep)
+- starship
