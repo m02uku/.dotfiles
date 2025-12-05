@@ -544,4 +544,3 @@ add({
 require('CopilotChat').setup()
 vim.keymap.set({ 'n', 'x' }, '<space>c', ':CopilotChat ', { desc = 'Open Copilot Chat' })
 
-add('https://github.com/neovim/nvim-lspconfig.git')
