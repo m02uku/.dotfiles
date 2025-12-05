@@ -1,5 +1,3 @@
-vim.loader.enable()
-
 require('plugins')
 require('lsp')
 require('options')

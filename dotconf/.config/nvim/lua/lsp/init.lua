@@ -11,7 +11,7 @@ local function create_autocmd(argsent, opts)
 end
 
 local mini = require('_modules.mini')
-local add, now, later = mini.add, mini.now, mini.later
+local now = mini.now
 
 -- ================================================================================
 
@@ -64,7 +64,53 @@ now(function()
   vim.lsp.enable({ 'lua_ls' })
 
   -- Python language server
+  -- Pyright (型チェック & 補完)
+  vim.lsp.config.pyright = {
+    cmd = { "pyright-langserver", "--stdio" },
+    filetypes = { "python" },
+    root_markers = {
+      "pyproject.toml",
+      "setup.py",
+      "setup.cfg",
+      "requirements.txt",
+      ".git",
+    },
+    settings = {
+      python = {
+        analysis = {
+          typeCheckingMode = "basic",
+          autoSearchPaths = true,
+          useLibraryCodeForTypes = true,
+          diagnosticMode = "openFilesOnly",
+        },
+      },
+    },
 
+    -------------------------------------------------------------------
+    -- ▼▼▼（オプション）venv 自動検出 使いたいときはコメント外す ▼▼▼
+    -- before_init = function(params)
+    --   local venv = os.getenv("VIRTUAL_ENV")
+    --   if venv then
+    --     params.processId = vim.NIL
+    --     params.initializationOptions = {
+    --       pythonPath = venv .. "/bin/python",
+    --     }
+    --   end
+    -- end,
+    -------------------------------------------------------------------
+  }
+
+  -- Ruff LSP（高速 Linter + 一部コードアクション）
+  vim.lsp.config.ruff = {
+    cmd = { "ruff-lsp" },
+    filetypes = { "python" },
+    root_markers = {
+      "pyproject.toml",
+      "ruff.toml",
+      ".ruff.toml",
+      ".git",
+    },
+  }
 
   -- ================================================================================
 
@@ -75,7 +121,14 @@ now(function()
   vim.api.nvim_create_user_command(
     'LspHealth',
     'checkhealth vim.lsp',
-    { desc = 'LSP health check' })
+    { desc = 'LSP health check' }
+  )
+
+  vim.api.nvim_create_user_command(
+    'LspClients',
+    'lua print(vim.inspect(vim.lsp.get_clients()))',
+    { desc = 'LSP health check' }
+  )
 
   create_autocmd('LspAttach', {
     callback = function(args)
@@ -94,6 +147,7 @@ now(function()
           buffer = args.buf,
           callback = function()
             vim.lsp.buf.format({ bufnr = args.buf, id = client.id, timeout_ms = 1000, async = false })
+            vim.notify('Formatted with ' .. client.name, vim.log.levels.INFO, { title = 'LSP' })
           end
         })
       end

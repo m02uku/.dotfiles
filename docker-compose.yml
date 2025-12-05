@@ -1,0 +1,10 @@
+services:
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ${HOME}/.dotfiles:/root/.dotfiles:ro
+    working_dir: /project
+    tty: true
+    stdin_open: true
