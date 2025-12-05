@@ -2,23 +2,14 @@
 
 ## How To Use
 
-- To install dotfiles on a new machine:
-
 ```shell
-git clone git@github.com:m02uku/.dotfiles.git ~/.dotfiles
+git clone --recursive git@github.com:m02uku/.dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
-./install
+make run {project}
+# if want to run in current directory:
+make run $PWD
 ```
 
-- To update an existing installation:
-
-```shell
-cd ~/.dotfiles
-git pull
-./install
-```
 ## Requirements
 
-- Each lsp
-- rg command (ripgrep)
-- starship
+- Docker
