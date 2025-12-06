@@ -59,17 +59,20 @@ RUN git clone --depth=1 https://github.com/LuaLS/lua-language-server /tmp/lua-la
 RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
 
 # ---------------------------------------------------------
-# Neovim 初回起動(mini.nvim プラグインセットのインストール)
+# Git safe.directory 設定（すべてのリポジトリを許可）
+# ---------------------------------------------------------
+RUN git config --global --add safe.directory '*'
+
+# ---------------------------------------------------------
+# dotfiles のコピーとインストール
+# ---------------------------------------------------------
+COPY . /root/.dotfiles
+RUN cd /root/.dotfiles && ./install
+
+# ---------------------------------------------------------
+# Neovim 初回起動（mini.nvim プラグインセットのインストール）
 # ---------------------------------------------------------
 RUN nvim --headless "+lua \
       if pcall(require, 'mini.deps') then \
         require('mini.deps').update() \
       end" +qa
-
-# ---------------------------------------------------------
-# Git safe.directory 設定
-# ---------------------------------------------------------
-# ---------------------------------------------------------
-# Git safe.directory 設定（すべてのリポジトリを許可）
-# ---------------------------------------------------------
-RUN git config --global --add safe.directory '*'
