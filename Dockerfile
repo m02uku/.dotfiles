@@ -2,7 +2,7 @@ FROM debian:bookworm-slim
 
 # 基本ツール
 RUN apt-get update && apt-get install -y \
-    zsh curl git python3 python3-pip jq xz-utils ca-certificates \
+    zsh curl git tmux python3 python3-pip jq xz-utils ca-certificates \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # zsh をデフォルトシェルに
