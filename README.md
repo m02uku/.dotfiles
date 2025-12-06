@@ -11,7 +11,7 @@ git clone --recursive git@github.com:m02uku/.dotfiles.git ~/.dotfiles && cd ~/.d
 # How To Update
 
 ```shell
-cd ~/.dotfiles && git pull &&  docker compose build
+cd ~/.dotfiles && git pull && docker compose build
 ```
 
 ## How To Use
