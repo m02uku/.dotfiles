@@ -8,9 +8,6 @@ RUN apt-get update && apt-get install -y \
 # zsh をデフォルトシェルに
 SHELL ["/bin/zsh", "-c"]
 
-# dotbot を safe.directory に追加
-RUN git config --global --add safe.directory /root/.dotfiles/dotbot
-
 # ---------------------------------------------------------
 # Install latest Neovim (from GitHub Releases)
 # ---------------------------------------------------------
@@ -69,3 +66,10 @@ RUN nvim --headless "+lua \
         require('mini.deps').update() \
       end" +qa
 
+# ---------------------------------------------------------
+# Git safe.directory 設定
+# ---------------------------------------------------------
+# ---------------------------------------------------------
+# Git safe.directory 設定（すべてのリポジトリを許可）
+# ---------------------------------------------------------
+RUN git config --global --add safe.directory '*'

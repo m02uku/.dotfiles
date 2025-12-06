@@ -10,7 +10,7 @@ services:
     tty: true
     stdin_open: true
     entrypoint: ["/bin/zsh"]
-    command: ["-c", "/root/.dotfiles/install && \
+    command: ["-c", "/root/.dotfiles/install || true && \
                      if [ ! -d \"$HOME/.local/share/nvim/site/pack/mini\" ]; then \
                        nvim --headless '+lua if pcall(require,\"mini.deps\") then require(\"mini.deps\").update() end' +qa; \
                      fi && exec zsh"]
