@@ -29,6 +29,17 @@ vim.opt.softtabstop = 2
 
 -- Share registers with the system clipboard
 vim.opt.clipboard:append('unnamedplus,unnamed')
+vim.g.clipboard = {
+  name = 'OSC 52',
+  copy = {
+    ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+  },
+  paste = {
+    ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+    ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+  },
+}
 
 -- use rg for external-grep
 vim.opt.grepprg = table.concat({
@@ -42,4 +53,3 @@ vim.opt.grepprg = table.concat({
   [[--glob='!*generated*']],
 }, ' ')
 vim.opt.grepformat = '%f:%l:%c:%m'
-

@@ -4,7 +4,13 @@ services:
       context: .
       dockerfile: Dockerfile
     volumes:
-      - ${HOME}/.dotfiles:/root/.dotfiles:ro
+      - ${HOME}/.dotfiles:/root/.dotfiles
+      - ${HOME}/.ssh:/root/.ssh
     working_dir: /project
     tty: true
     stdin_open: true
+    entrypoint: ["/bin/zsh"]
+    command: ["-c", "/root/.dotfiles/install && \
+                     if [ ! -d \"$HOME/.local/share/nvim/site/pack/mini\" ]; then \
+                       nvim --headless '+lua if pcall(require,\"mini.deps\") then require(\"mini.deps\").update() end' +qa; \
+                     fi && exec zsh"]

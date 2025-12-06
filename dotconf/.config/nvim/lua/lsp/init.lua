@@ -15,11 +15,11 @@ local now = mini.now
 
 -- ================================================================================
 
-now(function()
-  -- |---------------------------|
-  -- |    Per-language Config    |
-  -- |---------------------------|
+-- |---------------------------|
+-- |    Per-language Config    |
+-- |---------------------------|
 
+now(function()
   -- Common settings for all languages
   vim.lsp.config('*', {
     root_markers = { '.git' },
@@ -61,7 +61,6 @@ now(function()
       },
     }
   }
-  vim.lsp.enable({ 'lua_ls' })
 
   -- Python language server
   -- Pyright (型チェック & 補完)
@@ -86,6 +85,7 @@ now(function()
       },
     },
 
+    vim.lsp.enable({ 'lua_ls', 'pyright' })
     -------------------------------------------------------------------
     -- ▼▼▼（オプション）venv 自動検出 使いたいときはコメント外す ▼▼▼
     -- before_init = function(params)
@@ -111,13 +111,15 @@ now(function()
       ".git",
     },
   }
+end)
 
-  -- ================================================================================
+-- ================================================================================
 
-  -- |--------------------|
-  -- |    Other Config    |
-  -- |--------------------|
+-- |--------------------|
+-- |    Other Config    |
+-- |--------------------|
 
+now(function()
   vim.api.nvim_create_user_command(
     'LspHealth',
     'checkhealth vim.lsp',
