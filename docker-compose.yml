@@ -4,7 +4,10 @@ services:
       context: ${HOME}/.dotfiles
       dockerfile: Dockerfile
     volumes:
-      - ${HOME}/.ssh:/root/.ssh
+      - ${HOME}/.ssh:/root/.ssh:ro
+      - ${SSH_AUTH_SOCK}:/ssh-agent
+    environment:
+      - SSH_AUTH_SOCK=/ssh-agent
     working_dir: /project
     tty: true
     stdin_open: true
