@@ -479,7 +479,9 @@ add({
 })
 require('ts_context_commentstring').setup({})
 
-add({ source = 'https://github.com/stevearc/quicker.nvim' })
+add({
+  source = 'https://github.com/stevearc/quicker.nvim'
+})
 local quicker = require('quicker')
 vim.keymap.set('n', 'mq', function()
   quicker.toggle()
@@ -504,7 +506,9 @@ quicker.setup({
   },
 })
 
-add({ source = 'https://github.com/zbirenbaum/copilot.lua' })
+add({
+  source = 'https://github.com/zbirenbaum/copilot.lua'
+})
 
 ---@diagnostic disable-next-line: undefined-field
 require('copilot').setup({
@@ -544,3 +548,8 @@ add({
 require('CopilotChat').setup()
 vim.keymap.set({ 'n', 'x' }, '<space>c', ':CopilotChat ', { desc = 'Open Copilot Chat' })
 
+add({
+  source = "https://github.com/nosduco/remote-sshfs.nvim",
+  depends = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
+})
+require('remote-sshfs').setup({})
