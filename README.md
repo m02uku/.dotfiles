@@ -11,6 +11,7 @@ git clone --recursive git@github.com:m02uku/.dotfiles.git ~/.dotfiles && cd ~/.d
 # How To Update
 
 - To update all configs (including nvim settings), run below (rebuild image):
+
 ```shell
 cd ~/.dotfiles && git pull && docker compose build
 ```
@@ -29,7 +30,7 @@ make run $PWD
 
 ## Requirements
 
-- Docker
+- Docker (including docker-compose)
 
 ## NOTE
 
