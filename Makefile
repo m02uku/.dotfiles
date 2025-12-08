@@ -4,14 +4,16 @@ run:
 		echo "No path specified."; \
 		docker compose run --rm -it dev; \
 		exit 1; \
-	elif [ ! -d "$$RUN_PATH" ]; then \
+	fi; \
+	ABS_PATH=$$(eval echo "$$RUN_PATH"); \
+	ABS_PATH=$$(cd "$$ABS_PATH" && pwd); \
+	if [ ! -d "$$ABS_PATH" ]; then \
 		echo "Error: $$RUN_PATH is not a valid directory"; \
 		exit 1; \
 	fi; \
-	echo "$$RUN_PATH specified."; \
-	docker compose run --rm -it -v "$$RUN_PATH":/project dev; \
+	echo "Mounting: $$ABS_PATH"; \
+	docker compose run --rm -it -v "$$ABS_PATH":/project dev; \
 	if [ $$? -eq 130 ] || [ $$? -eq 0 ]; then exit 0; fi
 
 %:
 	@:
-

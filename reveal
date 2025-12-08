@@ -1,0 +1,12 @@
+echo "---"
+echo "Dockerfile:"
+cat Dockerfile
+echo "---"
+echo "docker-compose.yml:"
+cat docker-compose.yml
+echo "---"
+echo "Makefile:"
+cat Makefile
+echo "---"
+echo "Current structure:"
+tree -I .git -I dotbot -I .gitmodules -a
