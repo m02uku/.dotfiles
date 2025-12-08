@@ -2,11 +2,31 @@ FROM debian:bookworm-slim
 
 # 基本ツール
 RUN apt-get update && apt-get install -y \
-    zsh curl git tmux python3 python3-pip jq xz-utils ca-certificates \
+    zsh curl git tmux python3 python3-pip jq xz-utils ca-certificates sshfs kmod \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # zsh をデフォルトシェルに
 SHELL ["/bin/zsh", "-c"]
+
+# ---------------------------------------------------------
+# Git safe.directory 設定（すべてのリポジトリを許可）
+# ---------------------------------------------------------
+RUN git config --global --add safe.directory '*'
+
+# ---------------------------------------------------------
+# Install starship
+# ---------------------------------------------------------
+RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
+
+# ---------------------------------------------------------
+# Node.js(pyright 用)
+# ---------------------------------------------------------
+RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - \
+    && apt-get install -y nodejs \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# pyright(LSP)
+RUN npm install -g pyright
 
 # ---------------------------------------------------------
 # Install latest Neovim (from GitHub Releases)
@@ -18,16 +38,6 @@ RUN NVIM_URL=$(curl -s https://api.github.com/repos/neovim/neovim/releases/lates
     && tar -xzf /tmp/nvim.tar.gz -C /opt/nvim --strip-components=1 \
     && ln -s /opt/nvim/bin/nvim /usr/local/bin/nvim \
     && rm -f /tmp/nvim.tar.gz
-
-# ---------------------------------------------------------
-# Node.js(pyright 用)
-# ---------------------------------------------------------
-RUN curl -fsSL https://deb.nodesource.com/setup_current.x | bash - \
-    && apt-get install -y nodejs \
-    && apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# pyright(LSP)
-RUN npm install -g pyright
 
 # ---------------------------------------------------------
 # lua-language-server(ソースからビルド)
@@ -52,16 +62,6 @@ RUN git clone --depth=1 https://github.com/LuaLS/lua-language-server /tmp/lua-la
     && ln -s /opt/lua-language-server/bin/lua-language-server /usr/local/bin/lua-language-server \
     && cd / \
     && rm -rf /tmp/lua-language-server
-
-# ---------------------------------------------------------
-# Install starship
-# ---------------------------------------------------------
-RUN curl -sS https://starship.rs/install.sh | sh -s -- -y
-
-# ---------------------------------------------------------
-# Git safe.directory 設定（すべてのリポジトリを許可）
-# ---------------------------------------------------------
-RUN git config --global --add safe.directory '*'
 
 # ---------------------------------------------------------
 # dotfiles のコピーとインストール
