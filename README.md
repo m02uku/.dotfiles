@@ -18,6 +18,8 @@ cd ~/.dotfiles && git pull && docker compose build
 
 ## How To Use
 
+- In `~/.dotfiles`:
+
 ```shell
 make run {PROJEVT_DIR}
 ```
