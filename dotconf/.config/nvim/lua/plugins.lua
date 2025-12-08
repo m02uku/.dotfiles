@@ -547,9 +547,3 @@ add({
 
 require('CopilotChat').setup()
 vim.keymap.set({ 'n', 'x' }, '<space>c', ':CopilotChat ', { desc = 'Open Copilot Chat' })
-
-add({
-  source = "https://github.com/nosduco/remote-sshfs.nvim",
-  depends = { "nvim-telescope/telescope.nvim", "nvim-lua/plenary.nvim" }
-})
-require('remote-sshfs').setup({})
